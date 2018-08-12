@@ -46,4 +46,11 @@ public class DictionaryController {
     public GeneralContentResult<List<KeyValue<String, String>>> findByField(@PathVariable("field") String field) {
         return dictionaryService.findByField(field);
     }
+    
+    @ApiOperation(value = "字典列表(属性(不包含类别))")
+    @RequestMapping(value = "/attributes", method = RequestMethod.GET)
+    @ResponseBody
+    public GeneralContentResult<List<KeyValue<String, String>>> findByAttributes() {
+        return dictionaryService.findByAttributes();
+    }
 }

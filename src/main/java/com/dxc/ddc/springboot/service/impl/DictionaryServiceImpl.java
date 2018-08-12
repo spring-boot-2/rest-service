@@ -54,6 +54,17 @@ public class DictionaryServiceImpl implements DictionaryService {
         return result;
     }
     
+    @Override
+    @Transactional(propagation = Propagation.NOT_SUPPORTED, readOnly = true)
+    public GeneralContentResult<List<KeyValue<String, String>>> findByAttributes() {
+        List<Dictionary> content = dictionaryRepository.findByAttributesNotCodeQuery("A0001");
+        List<KeyValue<String, String>> list = content.stream().map(entity -> convertToKeyValue(entity)).collect(Collectors.toList());
+        GeneralContentResult<List<KeyValue<String, String>>> result = new GeneralContentResult<List<KeyValue<String, String>>>();
+        result.setResultCode(ResultCode.OPERATION_SUCCESS);
+        result.setResultContent(list);
+        return result;
+    }
+    
     private KeyValue<String, String> convertToKeyValue(Dictionary entity) {
         if (entity == null) {
             log.warn("entity is null.");

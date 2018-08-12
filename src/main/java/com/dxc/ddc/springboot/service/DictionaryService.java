@@ -16,4 +16,6 @@ public interface DictionaryService {
     GeneralContentResult<List<DictionaryInfo>> findAll();
     
     GeneralContentResult<List<KeyValue<String, String>>> findByField(String field);
+    
+    GeneralContentResult<List<KeyValue<String, String>>> findByAttributes();
 }
