@@ -27,3 +27,4 @@
 # Log file
 /logs/
 *.log
+/bin/

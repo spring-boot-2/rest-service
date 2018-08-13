@@ -63,7 +63,15 @@ public class PageableResult<T> implements Serializable {
         return content;
     }
 
+    public static Pageable createPageRequest(int page, int size) {
+        return PageRequest.of(page - 1, size);
+    }
+
     public static Pageable createPageRequest(int page, int size, Sort.Direction direction, String... properties) {
         return PageRequest.of(page - 1, size, direction, properties);
+    }
+
+    public static Pageable createPageRequest(int page, int size, Sort sort) {
+        return PageRequest.of(page - 1, size, sort);
     }
 }

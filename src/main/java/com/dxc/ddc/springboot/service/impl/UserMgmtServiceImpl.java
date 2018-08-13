@@ -8,7 +8,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,15 +25,12 @@ import com.dxc.ddc.springboot.repositories.DictionaryRepository;
 import com.dxc.ddc.springboot.repositories.UserRepository;
 import com.dxc.ddc.springboot.service.UserMgmtService;
 
-import lombok.extern.slf4j.Slf4j;
-
 /**
  *
  * @author Huanfeng, cai
  * @since JDK 1.8
  */
 @Service
-@Slf4j
 public class UserMgmtServiceImpl implements UserMgmtService {
 
     @Autowired
@@ -43,17 +39,17 @@ public class UserMgmtServiceImpl implements UserMgmtService {
     private DictionaryRepository dictionaryRepository;
     @Autowired
     private ModelMapper modelMapper;
-    
+
     @Autowired
     private PasswordEncoder passwordEncoder;
-    
+
     @Override
     @Transactional(propagation = Propagation.NOT_SUPPORTED, readOnly = true)
     public GeneralPagingResult<List<UserInfo>> findAllByPage(String keyword, Integer page, Integer size) {
         GeneralPagingResult<List<UserInfo>> result = new GeneralPagingResult<>();
-        Pageable pageable = PageableResult.createPageRequest(page, size, Sort.Direction.ASC, "loginId", "displayName");
+        Pageable pageable = PageableResult.createPageRequest(page, size);
         Page<User> pageDomains = userRepository
-                .findByLoginIdIgnoreCaseContainingOrDisplayNameIgnoreCaseContaining(keyword, keyword, pageable);
+                .findByKeywordPage(keyword, pageable);
         List<User> content = pageDomains.getContent();
 
         List<UserInfo> list = content.stream().map(entity -> convertToDto(entity)).collect(Collectors.toList());
@@ -98,11 +94,6 @@ public class UserMgmtServiceImpl implements UserMgmtService {
     }
 
     private UserInfo convertToDto(User entity) {
-        if (entity == null) {
-            log.warn("entity is null.");
-            return null;
-        }
-
         UserInfo dto = modelMapper.map(entity, UserInfo.class);
         dto.setStatusName(Optional.ofNullable(dto.getStatus())
                 .map(code -> dictionaryRepository.findByCode(String.valueOf(code))).map(dic -> dic.getValue()).orElse(""));
