@@ -7,6 +7,7 @@
              <level>ERROR</level>
          </filter>-->
         <encoder>
+        	<charset>UTF-8</charset>
             <pattern>%d{HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
@@ -18,6 +19,7 @@
             <fileNamePattern>springboot.%d{yyyy-MM-dd}.log</fileNamePattern>
         </rollingPolicy>
         <encoder>
+        	<charset>UTF-8</charset>
             <pattern>%d{HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
@@ -73,7 +75,7 @@
         </logger> -->
 
     <logger name="org.springframework">
-        <level value="ERROR" />
+        <level value="DEBUG" />
     </logger>
     <logger name="io.swagger.models.parameters.AbstractSerializableParameter">
         <level value="ERROR" />
